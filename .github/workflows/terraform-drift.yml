@@ -1,0 +1,32 @@
+name: Terraform drift detection
+
+on:
+  schedule:
+    - cron: "0 6 * * 1-5"   # weekdays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift-dev:
+    name: Drift dev
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/terraform-deploy.yml
+    with:
+      environment: dev
+      plan_environment: dev
+      apply: false
+
+  drift-prod:
+    name: Drift prod
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/terraform-deploy.yml
+    with:
+      environment: prod
+      plan_environment: prod-plan
+      apply: false
