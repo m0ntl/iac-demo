@@ -1,0 +1,30 @@
+name: Terraform destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to destroy
+        type: choice
+        options: [dev, prod]
+        required: true
+      confirm:
+        description: Type the environment name again to confirm
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  destroy:
+    name: Destroy ${{ inputs.environment }}
+    if: inputs.confirm == inputs.environment
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/terraform-deploy.yml
+    with:
+      environment: ${{ inputs.environment }}
+      plan_environment: ${{ inputs.environment == 'prod' && 'prod-plan' || inputs.environment }}
+      destroy: true
