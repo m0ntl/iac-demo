@@ -1,0 +1,3 @@
+/infra/environments/prod.tfvars  @m0ntl
+/infra/modules/                  @m0ntl
+/.github/                        @m0ntl
